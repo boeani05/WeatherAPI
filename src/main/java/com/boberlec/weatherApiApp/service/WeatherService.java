@@ -1,6 +1,7 @@
 package com.boberlec.weatherApiApp.service;
 
 import com.boberlec.weatherApiApp.client.WeatherApiClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.Optional;
 @Service
 public class WeatherService {
 
+    // di of weather api client
     private final WeatherApiClient weatherApiClient;
 
     private static final String NO_ADDRESS = "No address available!";
@@ -19,7 +21,6 @@ public class WeatherService {
     private static final String NO_CONDITIONS = "No conditions available!";
     private static final String NO_TIME = "No time available!";
 
-    // di of weatherapiclient
     public WeatherService(WeatherApiClient weatherApiClient) {
         this.weatherApiClient = weatherApiClient;
     }
