@@ -20,12 +20,15 @@ public class WeatherApiClient {
     private String apiUrl;
 
     // load a restclient from config class
-    @Autowired
-    private RestClient restClient;
+    private final RestClient restClient;
+
+    public WeatherApiClient(RestClient restClient) {
+        this.restClient = restClient;
+    }
 
     public Map<String, Object> getWeather(String city) {
         return restClient.get()
-                .uri(apiUrl + "/" + city + "?key=" + apiKey)
+                .uri(apiUrl + "/" + city + "?unitGroup=metric" + "&contentType=json" + "&key=" + apiKey)
                 .retrieve()
                 .body(Map.class);
     }
