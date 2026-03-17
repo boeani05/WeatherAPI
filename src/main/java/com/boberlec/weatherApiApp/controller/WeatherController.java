@@ -1,7 +1,6 @@
 package com.boberlec.weatherApiApp.controller;
 
 import com.boberlec.weatherApiApp.service.WeatherService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +24,7 @@ public class WeatherController {
     ) {
         // Basic error handling
         if (city.isBlank()) {
-            throw new IllegalArgumentException("\nCity must not be empty.");
+            throw new IllegalArgumentException("City must not be empty.");
         }
 
 
