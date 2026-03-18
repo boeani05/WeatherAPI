@@ -25,6 +25,7 @@ public class WeatherCache {
     }
 
     // method to get weather from cache
+    @SuppressWarnings("unchecked")
     public Map<String, Object> getWeatherFromCache(String city) {
         return (Map<String, Object>) redisTemplate
                 .opsForValue()
