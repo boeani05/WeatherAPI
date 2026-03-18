@@ -29,8 +29,7 @@ public class WeatherController {
 
 
         // controller calls weatherService to save weather data in a map (spring converts it into json)
-        Map<String, Object> weatherData = weatherService.getWeather(city);
 
-        return weatherData;
+        return weatherService.getWeather(city);
     }
 }
