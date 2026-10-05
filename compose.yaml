@@ -1,0 +1,7 @@
+# redis for the weather cache: "docker compose up -d" starts it, "docker compose down" stops it
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: weather-redis
+    ports:
+      - "6379:6379"

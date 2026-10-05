@@ -27,7 +27,10 @@ public class WeatherService {
         this.weatherCache = weatherCache;
     }
 
-    public Map<String, Object> getWeather(String city) {
+    public Map<String, Object> getWeather(String requestedCity) {
+
+        // trimmed once here, so that cache and weather api work with the same city
+        String city = requestedCity.trim();
 
         Map<String, Object> cachedWeatherData = weatherCache.getWeatherFromCache(city);
 
@@ -38,13 +41,19 @@ public class WeatherService {
             Map<String, Object> smallerResponseOfApiClientCall = createDefaultResult(weatherOfApiClientCall);
 
             // calls method of weatherapiclient to get weather data (not responsibility of service)
-            firstDay(weatherOfApiClientCall).ifPresent(day -> {
-                smallerResponseOfApiClientCall.put("temperature", day.getOrDefault("temp", 0.0));
+            Optional<Map<String, Object>> firstDay = firstDay(weatherOfApiClientCall);
+
+            firstDay.ifPresent(day -> {
+                smallerResponseOfApiClientCall.put("temperature", day.get("temp"));
                 smallerResponseOfApiClientCall.put("conditions", day.getOrDefault("conditions", NO_CONDITIONS));
                 smallerResponseOfApiClientCall.put("datetime", day.getOrDefault("datetime", NO_TIME));
             });
 
-            weatherCache.saveWeatherToCache(city, smallerResponseOfApiClientCall);
+            // only complete data goes into the cache - otherwise the placeholder texts
+            // would be served for a whole hour, even if the weather api works again
+            if (firstDay.isPresent()) {
+                weatherCache.saveWeatherToCache(city, smallerResponseOfApiClientCall);
+            }
 
             return smallerResponseOfApiClientCall;
         }
@@ -64,7 +73,8 @@ public class WeatherService {
 
         smallerResponseOfApiClientCall.put("city", weatherOfApiClientCall.getOrDefault("resolvedAddress", NO_ADDRESS));
         smallerResponseOfApiClientCall.put("description", weatherOfApiClientCall.getOrDefault("description", NO_DESCRIPTION));
-        smallerResponseOfApiClientCall.put("temperature", 0.0);
+        // null and not 0.0: zero degrees is a real temperature, "unknown" must not look like one
+        smallerResponseOfApiClientCall.put("temperature", null);
         smallerResponseOfApiClientCall.put("conditions", NO_CONDITIONS);
         smallerResponseOfApiClientCall.put("datetime", NO_TIME);
 

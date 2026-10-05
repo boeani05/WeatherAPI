@@ -1,0 +1,14 @@
+# Copy this file to src/main/resources/application.properties
+# (that file is in .gitignore, so the api key never ends up in git).
+
+# weather api (visual crossing timeline api) - get a free key at https://www.visualcrossing.com
+# either write the key after the "=" or set the environment variable WEATHER_API_KEY
+weather.api.key=${WEATHER_API_KEY:}
+weather.api.base-url=https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline
+
+# redis - start it with "docker compose up -d"
+spring.data.redis.host=localhost
+spring.data.redis.port=6379
+# give up fast if redis is not reachable - the app then answers without cache
+spring.data.redis.connect-timeout=2s
+spring.data.redis.timeout=2s
